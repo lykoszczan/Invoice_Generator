@@ -3,10 +3,169 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:vm="clr-namespace:Invoice_Generator.ViewModel"
         xmlns:local="clr-namespace:Invoice_Generator"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        ResizeMode="CanMinimize"
+        Title="MainWindow" Height="560" Width="800">
+    <Window.DataContext>
+        <vm:InvoiceViewModel/>
+    </Window.DataContext>
     <Grid>
-        
-    </Grid>
+        <TabControl Name="Tabs1" TabStripPlacement="Top">
+            <TabItem Header="Nowa faktura">
+                <StackPanel Orientation="Vertical" Grid.IsSharedSizeScope="True">
+                    <Label FontWeight="Bold">Dane kontrahenta</Label>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0">Nazwa</Label>
+                        <TextBox Grid.Column="1" Text="{Binding Customer.Name}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0">NIP</Label>
+                        <TextBox Grid.Column="1" Text="{Binding Customer.Nip}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0">Adres</Label>
+                        <TextBox Grid.Column="1" Text="{Binding Customer.Adress}"/>
+                    </Grid>
+                    <Label FontWeight="Bold">Pozycje faktury</Label>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0">Nazwa</Label>
+                        <TextBox Grid.Column="1" Text="{Binding PositionName, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0">Jednostka</Label>
+                        <TextBox Grid.Column="1" Text="{Binding PositionUnit, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0">Cena jednostkowa brutto</Label>
+                        <TextBox Grid.Column="1" Text="{Binding PositionPrice, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=250}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0">Ilość</Label>
+                        <TextBox Grid.Column="1" Text="{Binding Position.Quantity, UpdateSourceTrigger=PropertyChanged, Mode=TwoWay, Delay=250}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0">Stawka VAT [%]</Label>
+                        <TextBox Grid.Column="1" Text="{Binding Position.Vat}"/>
+                    </Grid>
+                    <Button Content="Zatwierdź pozycję" Height="25"
+            VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,0,0,10"
+            Command="{Binding AddPosition}"/>
+                    <DataGrid ItemsSource="{Binding Positions}"
+                              SelectedItem="{Binding Path=SelectedPosition, Mode=TwoWay}"
+                              Margin="5,0,5,0"
+                      ColumnHeaderHeight="30"
+                      RowHeight="20" 
+                      Height="130">
+                    </DataGrid>
+                    <Button Content="Usuń zaznaczoną pozycję" Height="25"
+            VerticalAlignment="Bottom" HorizontalAlignment="Left"  Margin="5,0,0,10"
+            Command="{Binding DeletePosition}"/>
+                    <Button Content="Wystaw fakturę" Height="25"
+            VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,10" 
+            Command="{Binding SaveInvoice}"/>
+                </StackPanel>
+            </TabItem>
+            <TabItem Header="Lista faktur">abc</TabItem>
+            <TabItem Header="Dane sprzedawcy">
+                <StackPanel Orientation="Vertical" Grid.IsSharedSizeScope="True">
+                    <Label FontWeight="Bold">Dane wystawcy faktury VAT</Label>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0">Nazwa</Label>
+                        <TextBox Grid.Column="1" Text="{Binding Source={StaticResource Settings}, Path=Default.Name}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0">NIP</Label>
+                        <TextBox Grid.Column="1" Text="{Binding Source={StaticResource Settings}, Path=Default.NIP}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0">Nr rachunku bankowego</Label>
+                        <TextBox Grid.Column="1" Text="{Binding Source={StaticResource Settings}, Path=Default.BankAccount}"/>
+                    </Grid>
+                    <Label FontWeight="Bold">Dane adresowe</Label>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0">Ulica</Label>
+                        <TextBox Grid.Column="1" Text="{Binding Source={StaticResource Settings}, Path=Default.Street}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0">Numer</Label>
+                        <TextBox Grid.Column="1" Text="{Binding Source={StaticResource Settings}, Path=Default.Number}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0">Kod pocztowy</Label>
+                        <TextBox Grid.Column="1" Text="{Binding Source={StaticResource Settings}, Path=Default.PostalCode}"/>
+                    </Grid>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto" SharedSizeGroup="Label"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <Label Grid.Column="0">Miasto</Label>
+                        <TextBox Grid.Column="1" Text="{Binding Source={StaticResource Settings}, Path=Default.City}"/>
+                    </Grid>
+                    <Button Content="Zapisz dane" Height="25"
+            VerticalAlignment="Bottom" HorizontalAlignment="Left" Margin="5,10" 
+            Command="{Binding SaveSettings}"/>
+                </StackPanel>
+                
+            </TabItem>
+        </TabControl>
+            </Grid>
 </Window>
