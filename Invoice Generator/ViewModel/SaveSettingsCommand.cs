@@ -9,7 +9,12 @@ namespace Invoice_Generator.ViewModel
 {
     public class SaveSettingsCommand : ICommand
     {
-        public event EventHandler CanExecuteChanged;
+        public event EventHandler CanExecuteChanged
+        {
+            add { CommandManager.RequerySuggested += value; }
+            remove { CommandManager.RequerySuggested -= value; }
+        }
+
         private readonly InvoiceViewModel vm;
 
         public SaveSettingsCommand(InvoiceViewModel viewmodel)
