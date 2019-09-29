@@ -5,18 +5,46 @@ using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
+using System.Data.Entity;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Invoice_Generator.Model
 {
+    public class InvoicesContext : DbContext
+    {
+        public DbSet<Invoice> Invoices { get; set; }
+        public DbSet<PositionDB> Positions { get; set; }
+    }
+
     public class Invoice
     {
         public int InvoiceId { get; set; }
         public string Name { get; set; }
+        public DateTime DateTime { get; set; }    
         public string CustomerName { get; set; }
         public string CustomerNip { get; set; }
         public string CustomerAdress { get; set; }
         public string AmountBrutto { get; set; }
 
+        public virtual ICollection<PositionDB> Positions {get; set;}
+    }
+
+    public class PositionDB
+    {
+        [Key]
+        public int PositionId { get; set; }        
+        public int RowIndex { get; set; }
+        public string Name { get; set; }
+        public string Unit { get; set; }
+        public double PriceNetto { get; set; }
+        public double PriceBrutto { get; set; }
+        public double Quantity { get; set; }
+        public double Vat { get; set; }
+        public double AmountNetto { get; set; }
+        public double AmountBrutto { get; set; }
+
+        public virtual Invoice Invoices { get; set; }
 
     }
 

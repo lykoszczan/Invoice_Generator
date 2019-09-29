@@ -27,19 +27,31 @@ namespace Invoice_Generator.ViewModel
     }
 
     public class InvoiceViewModel : ViewModelBase
-    {
-        private Invoice InvoiceInfo = new Invoice();
-
+    {        
         private ICommand saveInvoiceCommand;
         private ICommand addPositionCommand;
         private ICommand deletePositionCommand;
+        private ICommand deleteInvoiceCommand;
         private ICommand saveSettingsCommand;
 
         private Position fSelectedPosition;
+        private Invoice fSelectedInvoice;
         private Position fPosition;
         private Company fCustomer;
 
         private ObservableCollection<Position> fpositions;
+
+        private readonly InvoicesContext _dataAccess = new InvoicesContext();
+
+        private ObservableCollection<Invoice> finvoices;
+        public ObservableCollection<Invoice> Invoices
+        {
+            get { return finvoices; }
+            set {
+                finvoices = value;
+                OnPropertyChanged();
+            }
+        }
 
         public ObservableCollection<Position> Positions
         {
@@ -57,6 +69,16 @@ namespace Invoice_Generator.ViewModel
             set
             {
                 this.fSelectedPosition = value;
+                OnPropertyChanged();
+            }
+        }
+
+        public Invoice SelectedInvoice
+        {
+            get { return this.fSelectedInvoice; }
+            set
+            {
+                this.fSelectedInvoice = value;
                 OnPropertyChanged();
             }
         }
@@ -148,6 +170,15 @@ namespace Invoice_Generator.ViewModel
             }
         }
 
+        public ICommand DeleteInvoice
+        {
+            get
+            {
+                if (deleteInvoiceCommand == null) deleteInvoiceCommand = new DeleteInvoiceCommand(this);
+                return deleteInvoiceCommand;
+            }
+        }
+
         public ICommand SaveSettings
         {
             get
@@ -162,6 +193,7 @@ namespace Invoice_Generator.ViewModel
             fpositions = new ObservableCollection<Position>();
             fCustomer = new Company();
             fPosition = new Position();
+            finvoices = new ObservableCollection<Invoice>(_dataAccess.Invoices);
         }
 
 

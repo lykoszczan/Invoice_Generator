@@ -36,17 +36,29 @@ namespace Invoice_Generator.ViewModel
                 return true;
         }
         public void Execute(object parameter)
-        {                        
-            string fileName = string.Concat(System.AppDomain.CurrentDomain.BaseDirectory, @"invoice.docx");
+        {
+            string invoiceName;
+            int maxId;
+            using (var db = new InvoicesContext())
+            {                
+                if (!db.Invoices.Any())
+                {
+                    maxId = 0;
+                }
+                else
+                    maxId = db.Invoices.Where(u => u.DateTime.Year == DateTime.Now.Year).OrderByDescending(u => u.InvoiceId).FirstOrDefault().InvoiceId;            
+                invoiceName = $"FV_{++maxId}_{DateTime.Now.Year}";
+            }
+
+            string fileName = string.Concat(AppDomain.CurrentDomain.BaseDirectory, invoiceName, ".docx");
 
             var doc = DocX.Create(fileName);
-
-            string docNr = "FV 1/2019";
+            
             string docDate = DateTime.Now.ToString("dd/MM/yyyy").ToString();
             int paymentDays = 14;
             string paymentType = "przelew";
 
-            doc.InsertParagraph($"Faktura nr {docNr}").Alignment = Alignment.right;
+            doc.InsertParagraph($"Faktura nr {invoiceName.Replace("_", "/")}").Alignment = Alignment.right;
             doc.InsertParagraph($"Data wystawienia {docDate}").Alignment = Alignment.right;
             doc.InsertParagraph($"Termin płatności: {paymentDays.ToString()} dni").Alignment = Alignment.right;
             doc.InsertParagraph($"Metoda płatności: {paymentType}").Alignment = Alignment.right;
@@ -98,7 +110,47 @@ namespace Invoice_Generator.ViewModel
 
             doc.Save();
 
-            Process.Start("WINWORD.EXE", "\"" + fileName + "\"");            
+            Process.Start("WINWORD.EXE", "\"" + fileName + "\"");
+
+            using (var db = new InvoicesContext())
+            {                
+                var invoice = new Invoice
+                {
+                    Name = invoiceName,    
+                    DateTime = DateTime.Now,
+                    CustomerName = this.vm.Customer.Name,
+                    CustomerAdress = this.vm.Customer.Adress,
+                    CustomerNip = this.vm.Customer.Nip,
+                    AmountBrutto = totalAmount.ToString()
+                };                
+
+                db.Invoices.Add(invoice);
+
+                foreach(Position item in this.vm.Positions)
+                {
+                    PositionDB posDB = new PositionDB
+                    {
+                        RowIndex = item.RowIndex,
+                        Name = item.Name,
+                        Unit = item.Unit,
+                        PriceNetto = item.PriceNetto,
+                        PriceBrutto = item.PriceBrutto.GetValueOrDefault(),
+                        Quantity = item.Quantity,
+                        Vat = item.Vat,
+                        AmountNetto = item.AmountNetto,
+                        AmountBrutto = item.AmountBrutto,
+                        Invoices = invoice
+                    };
+
+                    db.Positions.Add(posDB);
+
+                }
+                db.SaveChanges();
+
+                this.vm.Invoices = new System.Collections.ObjectModel.ObservableCollection<Invoice>(db.Invoices);
+            }
+
+            this.vm.Positions.Clear();
         }
     }
 }

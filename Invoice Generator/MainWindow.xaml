@@ -99,7 +99,20 @@
             Command="{Binding SaveInvoice}"/>
                 </StackPanel>
             </TabItem>
-            <TabItem Header="Lista faktur">abc</TabItem>
+            <TabItem Header="Lista faktur">
+                <StackPanel Orientation="Vertical" Grid.IsSharedSizeScope="True">
+                    <DataGrid ItemsSource="{Binding Invoices}"
+                              SelectedItem="{Binding Path=SelectedInvoice, Mode=TwoWay}"
+                              Margin="5,0,5,50"                              
+                      ColumnHeaderHeight="30"
+                      RowHeight="20" 
+                      Height="370">
+                    </DataGrid>
+                    <Button Content="Usuń zaznaczoną fakturę" Height="25"
+            VerticalAlignment="Bottom" HorizontalAlignment="Left"  Margin="5,0,0,10"
+            Command="{Binding DeleteInvoice}"/>
+                </StackPanel>
+            </TabItem>
             <TabItem Header="Dane sprzedawcy">
                 <StackPanel Orientation="Vertical" Grid.IsSharedSizeScope="True">
                     <Label FontWeight="Bold">Dane wystawcy faktury VAT</Label>
