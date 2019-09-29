@@ -118,7 +118,14 @@ namespace Invoice_Generator.ViewModel
             get { return this.fPosition.PriceBrutto; }
             set
             {
-                this.fPosition.PriceBrutto = value;
+                if (value != null)
+                {
+
+                    string temp = value.GetValueOrDefault().ToString("F");
+                    this.fPosition.PriceBrutto = double.Parse(temp);
+                }
+                else
+                    this.fPosition.PriceBrutto = value;
                 OnPropertyChanged();
             }
         }

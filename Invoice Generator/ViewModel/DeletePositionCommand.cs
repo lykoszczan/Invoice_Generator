@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Invoice_Generator.Model;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -37,7 +38,16 @@ namespace Invoice_Generator.ViewModel
             if (index < 0)
                 throw new Exception("nie wybrano elementu");
             else
+            {
                 this.vm.Positions.RemoveAt(index);
+                foreach(Position item in this.vm.Positions)
+                {
+                    item.RowIndex = this.vm.Positions.IndexOf(item) + 1;
+                }                
+                this.vm.Positions.OrderBy(x => x.RowIndex);
+                List<Position> temp = this.vm.Positions.ToList();
+                this.vm.Positions = new System.Collections.ObjectModel.ObservableCollection<Position>(temp);
+            }
         }
     }
 }

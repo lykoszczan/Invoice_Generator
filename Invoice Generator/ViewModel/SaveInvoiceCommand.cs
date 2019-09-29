@@ -70,13 +70,16 @@ namespace Invoice_Generator.ViewModel
             doc.InsertParagraph($"{Properties.Settings.Default.Street} {Properties.Settings.Default.Number}");
             doc.InsertParagraph($"{Properties.Settings.Default.PostalCode} {Properties.Settings.Default.City}");
             doc.InsertParagraph($"NIP: {Properties.Settings.Default.NIP}");
-            doc.InsertParagraph($"Nr rachunku do wpłat: {Properties.Settings.Default.BankAccount}");
+            if(!string.IsNullOrEmpty(Properties.Settings.Default.BankAccount))
+                doc.InsertParagraph($"Nr rachunku do wpłat: {Properties.Settings.Default.BankAccount}");
 
             doc.InsertParagraph("Nabywca:").Bold().Alignment = Alignment.right;                  
             doc.InsertParagraph(this.vm.Customer.Name).Alignment = Alignment.right;
             doc.InsertParagraph(this.vm.Customer.Adress).Alignment = Alignment.right;
-            doc.InsertParagraph($"NIP {this.vm.Customer.Nip}").Alignment = Alignment.right;
+            doc.InsertParagraph($"NIP: {this.vm.Customer.Nip}").Alignment = Alignment.right;
 
+            doc.InsertParagraph();
+            doc.InsertParagraph();
             Table posTable = doc.AddTable(this.vm.Positions.Count + 1, 8);
             posTable.Rows[0].Cells[0].Paragraphs.First().Append("Lp.");
             posTable.Rows[0].Cells[1].Paragraphs.First().Append("Nazwa");
@@ -89,26 +92,34 @@ namespace Invoice_Generator.ViewModel
             
             foreach(Position item in this.vm.Positions)
             {
-                int lp = this.vm.Positions.IndexOf(item) + 1;
-                posTable.Rows[lp].Cells[0].Paragraphs.First().Append(lp.ToString());
-                posTable.Rows[lp].Cells[1].Paragraphs.First().Append(item.Name);
-                posTable.Rows[lp].Cells[2].Paragraphs.First().Append(item.Unit);
-                posTable.Rows[lp].Cells[3].Paragraphs.First().Append(item.Quantity.ToString());
-                posTable.Rows[lp].Cells[4].Paragraphs.First().Append(item.PriceNetto.ToString());
-                posTable.Rows[lp].Cells[5].Paragraphs.First().Append($"{item.Vat.ToString()}%");
-                posTable.Rows[lp].Cells[6].Paragraphs.First().Append(item.AmountNetto.ToString());
-                posTable.Rows[lp].Cells[7].Paragraphs.First().Append(item.AmountBrutto.ToString());                
+                item.RowIndex = this.vm.Positions.IndexOf(item) + 1;
+                posTable.Rows[item.RowIndex].Cells[0].Paragraphs.First().Append($"{item.RowIndex.ToString()}.");
+                posTable.Rows[item.RowIndex].Cells[1].Paragraphs.First().Append(item.Name);
+                posTable.Rows[item.RowIndex].Cells[2].Paragraphs.First().Append(item.Unit);
+                posTable.Rows[item.RowIndex].Cells[3].Paragraphs.First().Append(item.Quantity.ToString("F"));
+                posTable.Rows[item.RowIndex].Cells[4].Paragraphs.First().Append(item.PriceNetto.ToString("F"));
+                posTable.Rows[item.RowIndex].Cells[5].Paragraphs.First().Append($"{item.Vat.ToString()}%");
+                posTable.Rows[item.RowIndex].Cells[6].Paragraphs.First().Append(item.AmountNetto.ToString("F"));
+                posTable.Rows[item.RowIndex].Cells[7].Paragraphs.First().Append(item.AmountBrutto.ToString("F"));                
             }
 
             doc.InsertTable(posTable);
+            doc.InsertParagraph();
+            doc.InsertParagraph();
+            doc.InsertParagraph("Zapłacono: 0,00 PLN").Alignment = Alignment.right;
+
+            double totalAmountBrutto = this.vm.Positions.Sum(x => x.AmountBrutto);
+            double totalAmountNetto = this.vm.Positions.Sum(x => x.AmountNetto);
             
-            doc.InsertParagraph("Zapłacono: 0.00 PLN").Alignment = Alignment.right;
-
-            double totalAmount = this.vm.Positions.Sum(item => item.AmountBrutto);
-
-            doc.InsertParagraph($"Do zapłaty: {totalAmount.ToString()} PLN").Alignment = Alignment.right;
-            doc.InsertParagraph($"Razem: {totalAmount.ToString()} PLN").Alignment = Alignment.right;
+            doc.InsertParagraph($"Razem netto: {totalAmountNetto.ToString("F")} PLN").Alignment = Alignment.right;
+            doc.InsertParagraph($"Razem brutto: {totalAmountBrutto.ToString("F")} PLN").Alignment = Alignment.right;            
             doc.InsertParagraph("Uwagi: W tytule przelewu proszę podać nr zamówienia.");
+            doc.InsertParagraph($"Do zapłaty: {totalAmountBrutto.ToString("F")} PLN").Alignment = Alignment.right;
+
+            doc.AddFooters();
+            var footerDefault = doc.Footers.Odd;
+            footerDefault.InsertParagraph("…..………………...........................                                         ..........................................................").Alignment = Alignment.center;
+            footerDefault.InsertParagraph("Osoba upoważniona do obioru                                        Osoba upoważniona do wystawienia").Alignment = Alignment.center;
 
             doc.Save();
 
@@ -120,10 +131,12 @@ namespace Invoice_Generator.ViewModel
                 {
                     Name = invoiceName,    
                     DateTime = DateTime.Now,
+                    SellerName = Properties.Settings.Default.Name,
+                    SellerNip = Properties.Settings.Default.NIP,
                     CustomerName = this.vm.Customer.Name,
                     CustomerAdress = this.vm.Customer.Adress,
                     CustomerNip = this.vm.Customer.Nip,
-                    AmountBrutto = totalAmount.ToString()
+                    AmountBrutto = totalAmountBrutto.ToString()
                 };                
 
                 db.Invoices.Add(invoice);

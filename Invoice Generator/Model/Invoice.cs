@@ -21,7 +21,9 @@ namespace Invoice_Generator.Model
     {
         public int InvoiceId { get; set; }
         public string Name { get; set; }
-        public DateTime DateTime { get; set; }    
+        public DateTime DateTime { get; set; }   
+        public string SellerName { get; set; }
+        public string SellerNip { get; set; }
         public string CustomerName { get; set; }
         public string CustomerNip { get; set; }
         public string CustomerAdress { get; set; }
@@ -116,8 +118,7 @@ namespace Invoice_Generator.Model
 
         public Position()
         {
-            this.Vat = 23;
-            this.Quantity = 1;
+            this.Vat = 23;            
         }
 
         public Position(Position position)
@@ -152,8 +153,8 @@ namespace Invoice_Generator.Model
             this.fRowIndex = count + 1;
             this.fPriceNetto = this.fPriceBrutto.GetValueOrDefault() / (1 + this.fVat / 100);
             this.fPriceNetto = Math.Round(this.fPriceNetto, 2);            
-            this.AmountNetto = this.fQuantity * this.fPriceNetto;
-            this.AmountBrutto = this.fQuantity * this.fPriceBrutto.GetValueOrDefault();
+            this.AmountNetto = Math.Round(this.fQuantity * this.fPriceNetto, 2);
+            this.AmountBrutto = Math.Round(this.fQuantity * this.fPriceBrutto.GetValueOrDefault(),2);
         }
 
     }

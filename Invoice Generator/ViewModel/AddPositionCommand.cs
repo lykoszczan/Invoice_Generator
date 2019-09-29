@@ -37,7 +37,10 @@ namespace Invoice_Generator.ViewModel
 
         public void Execute(object parameter)
         {        
-            this.vm.Position.Calculate(this.vm.Positions.Count);
+            if(this.vm.Positions.Count == 0)
+                this.vm.Position.Calculate(0);
+            else
+                this.vm.Position.Calculate(this.vm.Positions.Last().RowIndex);
             Position pos = new Position(this.vm.Position);
             this.vm.Positions.Add(pos);
             this.vm.PositionName = string.Empty;
