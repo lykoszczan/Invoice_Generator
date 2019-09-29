@@ -21,7 +21,7 @@ namespace Invoice_Generator.Model
     {
         public int InvoiceId { get; set; }
         public string Name { get; set; }
-        public DateTime DateTime { get; set; }   
+        public DateTime Created { get; set; }   
         public string SellerName { get; set; }
         public string SellerNip { get; set; }
         public string CustomerName { get; set; }

@@ -48,7 +48,7 @@ namespace Invoice_Generator.ViewModel
                     maxId = 0;
                 }
                 else
-                    maxId = db.Invoices.Where(u => u.DateTime.Year == DateTime.Now.Year).OrderByDescending(u => u.InvoiceId).FirstOrDefault().InvoiceId;            
+                    maxId = db.Invoices.Where(u => u.Created.Year == DateTime.Now.Year).OrderByDescending(u => u.InvoiceId).FirstOrDefault().InvoiceId;            
                 invoiceName = $"FV_{++maxId}_{DateTime.Now.Year}";
             }
 
@@ -105,16 +105,18 @@ namespace Invoice_Generator.ViewModel
 
             doc.InsertTable(posTable);
             doc.InsertParagraph();
-            doc.InsertParagraph();
-            doc.InsertParagraph("Zapłacono: 0,00 PLN").Alignment = Alignment.right;
+            doc.InsertParagraph();            
 
             double totalAmountBrutto = this.vm.Positions.Sum(x => x.AmountBrutto);
             double totalAmountNetto = this.vm.Positions.Sum(x => x.AmountNetto);
             
             doc.InsertParagraph($"Razem netto: {totalAmountNetto.ToString("F")} PLN").Alignment = Alignment.right;
-            doc.InsertParagraph($"Razem brutto: {totalAmountBrutto.ToString("F")} PLN").Alignment = Alignment.right;            
-            doc.InsertParagraph("Uwagi: W tytule przelewu proszę podać nr zamówienia.");
+            doc.InsertParagraph($"Razem brutto: {totalAmountBrutto.ToString("F")} PLN").Alignment = Alignment.right;
+            doc.InsertParagraph("Zapłacono: 0,00 PLN").Alignment = Alignment.right;
             doc.InsertParagraph($"Do zapłaty: {totalAmountBrutto.ToString("F")} PLN").Alignment = Alignment.right;
+
+            doc.InsertParagraph();
+            doc.InsertParagraph("Uwagi: W tytule przelewu proszę podać nr zamówienia.");
 
             doc.AddFooters();
             var footerDefault = doc.Footers.Odd;
@@ -130,7 +132,7 @@ namespace Invoice_Generator.ViewModel
                 var invoice = new Invoice
                 {
                     Name = invoiceName,    
-                    DateTime = DateTime.Now,
+                    Created = DateTime.Now,
                     SellerName = Properties.Settings.Default.Name,
                     SellerNip = Properties.Settings.Default.NIP,
                     CustomerName = this.vm.Customer.Name,
