@@ -25,7 +25,7 @@ namespace Invoice_Generator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("IAI Sp. z o. o.")]
         public string Name {
             get {
                 return ((string)(this["Name"]));
@@ -37,7 +37,7 @@ namespace Invoice_Generator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("5252767146")]
         public string NIP {
             get {
                 return ((string)(this["NIP"]));
@@ -49,7 +49,7 @@ namespace Invoice_Generator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Aleja Piastów")]
         public string Street {
             get {
                 return ((string)(this["Street"]));
@@ -61,7 +61,7 @@ namespace Invoice_Generator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("71-064")]
         public string PostalCode {
             get {
                 return ((string)(this["PostalCode"]));
@@ -73,7 +73,7 @@ namespace Invoice_Generator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("Szczecin")]
         public string City {
             get {
                 return ((string)(this["City"]));
@@ -85,7 +85,7 @@ namespace Invoice_Generator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("30")]
         public string Number {
             get {
                 return ((string)(this["Number"]));
@@ -97,7 +97,7 @@ namespace Invoice_Generator.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("")]
+        [global::System.Configuration.DefaultSettingValueAttribute("82 1020 5226 0000 6102 0417 7895")]
         public string BankAccount {
             get {
                 return ((string)(this["BankAccount"]));

@@ -30,7 +30,9 @@ namespace Invoice_Generator.ViewModel
         public bool CanExecute(object parameter)
         {
             if (string.IsNullOrEmpty(this.vm.Customer.Name) || string.IsNullOrEmpty(this.vm.Customer.Adress) 
-                || string.IsNullOrEmpty(this.vm.Customer.Nip) || this.vm.Positions.Count <= 0)
+                || string.IsNullOrEmpty(this.vm.Customer.Nip) || this.vm.Positions.Count <= 0
+                || string.IsNullOrEmpty(Properties.Settings.Default.NIP)
+                || string.IsNullOrEmpty(Properties.Settings.Default.Name))
                 return false;
             else
                 return true;

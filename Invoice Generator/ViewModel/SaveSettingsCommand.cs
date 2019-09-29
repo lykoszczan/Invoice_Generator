@@ -19,7 +19,15 @@ namespace Invoice_Generator.ViewModel
 
         public bool CanExecute(object parameter)
         {
-            return true;
+            if (string.IsNullOrEmpty(Properties.Settings.Default.Name) ||
+                string.IsNullOrEmpty(Properties.Settings.Default.NIP) ||
+                string.IsNullOrEmpty(Properties.Settings.Default.Street) ||
+                string.IsNullOrEmpty(Properties.Settings.Default.Number) ||
+                string.IsNullOrEmpty(Properties.Settings.Default.PostalCode) ||
+                string.IsNullOrEmpty(Properties.Settings.Default.City))
+                return false;
+            else
+                return true;
         }
 
         public void Execute(object parameter)

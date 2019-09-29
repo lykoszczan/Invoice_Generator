@@ -3,25 +3,25 @@
   <Profiles />
   <Settings>
     <Setting Name="Name" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">IAI Sp. z o. o.</Value>
     </Setting>
     <Setting Name="NIP" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">5252767146</Value>
     </Setting>
     <Setting Name="Street" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Aleja Piastów</Value>
     </Setting>
     <Setting Name="PostalCode" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">71-064</Value>
     </Setting>
     <Setting Name="City" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">Szczecin</Value>
     </Setting>
     <Setting Name="Number" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">30</Value>
     </Setting>
     <Setting Name="BankAccount" Type="System.String" Scope="User">
-      <Value Profile="(Default)" />
+      <Value Profile="(Default)">82 1020 5226 0000 6102 0417 7895</Value>
     </Setting>
   </Settings>
 </SettingsFile>
