@@ -159,6 +159,9 @@ namespace Invoice_Generator.Model
 
     }
 
+    /// <summary>
+    /// Klasa reprezentująca kontrahenta
+    /// </summary>
     public class Company
     {
         private string fAdress;
@@ -167,38 +170,64 @@ namespace Invoice_Generator.Model
         private string fEmail;
         private string fPhone;
 
-
+        /// <summary>
+        /// adres
+        /// </summary>
         public string Adress
         {
             get { return fAdress; }
             set { fAdress = value.Trim(); }
         }
+
+        /// <summary>
+        /// nazwa
+        /// </summary>
         public string Name
         {
             get { return fName; }
             set { fName = value.Trim(); }
         }
+
+        /// <summary>
+        /// numer identyfikacji podatkowej
+        /// </summary>
         public string Nip
         {
             get { return fNip; }
             set { fNip = value.Trim(); }
         }
+
+        /// <summary>
+        /// adres email
+        /// </summary>
         public string Email
         {
             get { return fEmail; }
             set { fEmail = value; }
         }
+
+        /// <summary>
+        /// numer telefonu
+        /// </summary>
         public string Phone
         {
             get { return fPhone; }
             set { fPhone = value; }
         }
 
-        public Company()
+        public Company ()
         {
-            
+
         }
 
+        /// <summary>
+        /// konstruktor
+        /// </summary>
+        /// <param name="adress"></param>
+        /// <param name="name"></param>
+        /// <param name="nip"></param>
+        /// <param name="email"></param>
+        /// <param name="phone"></param>
         public Company(string adress, string name, string nip, string email, string phone)
         {
             this.fAdress = adress;
